@@ -1,7 +1,9 @@
 #include "CrazyEightsGame.hpp"
+#include "../MyEvent.h"
 #include <chrono>
 #include <random>
 #include <thread>
+#include <wx/event.h>
 #include <wx/wx.h>
 
 using namespace std::chrono_literals;
@@ -45,8 +47,10 @@ void CrazyEightsGame::humanDrewCard() {
     if (!deck.empty()) {
       players[0].insertCardToHand(deck.back());
       deck.pop_back();
-      gui->updatePlayArea(0, players[0].getHand(), deck.empty(),
-                          discardPile.back());
+      // gui->updatePlayArea(MyEvent event(gui), 0, players[0].getHand(),
+      //                  deck.empty(), discardPile.back());
+      // gui->dummyFunction();
+      updateGui();
     } else {
       std::cout << "You passed" << std::endl;
       auto hand = players[0].getHand();
@@ -57,8 +61,10 @@ void CrazyEightsGame::humanDrewCard() {
           return;
         }
       }
-      gui->updatePlayArea(0, players[0].getHand(), deck.empty(),
-                          discardPile.back());
+      // gui->updatePlayArea(MyEvent event(gui), 0, players[0].getHand(),
+      //  deck.empty(), discardPile.back());
+      // gui->dummyFunction();
+      updateGui();
       computersTurn();
     }
   }
@@ -84,8 +90,10 @@ void CrazyEightsGame::humanMadeMove(Card c) {
         endRound();
         return;
       }
-      gui->updatePlayArea(0, players[0].getHand(), deck.empty(),
-                          discardPile.back());
+      // gui->updatePlayArea(MyEvent event(gui), 0, players[0].getHand(),
+      //                  deck.empty(), discardPile.back());
+      // gui->dummyFunction();
+      updateGui();
       computersTurn();
     } else {
       gui->invalidMoveDialog();
@@ -101,8 +109,7 @@ void CrazyEightsGame::computersTurn() {
       endRound();
       return;
     }
-    gui->updatePlayArea(turn, players[turn].getHand(), deck.empty(),
-                        discardPile.back());
+    updateGui();
     // gui->Refresh();
     // gui->Update();
     std::this_thread::sleep_for(1s);
@@ -124,10 +131,11 @@ void CrazyEightsGame::computersMove() {
     auto newCard = deck.back();
     deck.pop_back();
     players[turn].insertCardToHand(newCard);
-    gui->updatePlayArea(turn, players[turn].getHand(), deck.empty(),
-                        discardPile.back());
+    // gui->updatePlayArea(MyEvent event(gui), turn, players[turn].getHand(),
+    // deck.empty(), discardPile.back());
     // gui->Refresh();
     // gui->Update();
+    updateGui();
     std::this_thread::sleep_for(500ms);
     auto validMove = checkCardValidity(newCard);
     if (validMove) {
@@ -179,8 +187,8 @@ void CrazyEightsGame::endRound() {
   // Calculate Scores
   roundOver = true;
   bool gameOver = false;
-  gui->updatePlayArea(turn, players[turn].getHand(), deck.empty(),
-                      discardPile.back());
+
+  gui->dummyFunction();
   // gui->Refresh();
   // gui->Update();
   for (auto &&player : players) {
@@ -229,4 +237,10 @@ void CrazyEightsGame::showGame() { gui->Show(true); }
 void CrazyEightsGame::hideGame() {
   std::cout << "This is pointer" << gui << std::endl;
   gui->hideGame();
+}
+
+void CrazyEightsGame::updateGui() {
+  MyEvent *event = new MyEvent(gui, turn, players[turn].getHand(), deck.empty(),
+                               discardPile.back());
+  gui->dummyFunction();
 }

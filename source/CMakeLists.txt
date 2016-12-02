@@ -38,6 +38,8 @@ add_executable(cardiansClient main.cpp
     mainMenu.cpp mainMenu.h
     clientInfo.cpp clientInfo.h
     lobby.cpp lobby.h
-    availableGames.cpp availableGames.h)
+    availableGames.cpp availableGames.h
+    MyEvent.h MyEvent.cpp
+    )
 
 target_link_libraries(cardiansClient GameLogic Networking Messages OnlineGameLogic ${externLibs})
