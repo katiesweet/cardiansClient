@@ -1,5 +1,4 @@
 #include "Simple.h"
-#include "GameLogic/HeartsGame.hpp"
 #include "button.h"
 
 #include <wx/sizer.h>
@@ -47,6 +46,9 @@ Simple::Simple(const wxString &title, clientInfo *theClientScreen)
 
   eightsGame = nullptr;
   heartsGame = nullptr;
+
+  eightsOnline = nullptr;
+  heartsOnline = nullptr;
   // //  SetSizer(backgroundSizer);
   Centre();
   SetBackgroundColour(wxColour(0, 0, 0));
@@ -189,24 +191,44 @@ void Simple::switchPage(wxString buttonSwitch) {
     } else {
       pageSizer->Show(mainPane, true);
     }
-  } else {
-    if (heartsGame) {
-      heartsGame->hideGame();
-    }
-    if (eightsGame) {
-      eightsGame->hideGame();
-    }
 
-    std::cout << "MainScreen" << std::endl;
-    pageSizer->Show(mainPane, true, true);
+  } else if (buttonSwitch == "ConnectToOnlineHearts") {
+    heartsOnline = new heartsOnline(this);
+    pageSizer->Add(heartsOnline->getGui(), 1, wxGROW);
+    //  heartsGame->hideGame();
+    // heartsGame->startGame();
+
+  } else if (buttonSwitch == "ConnectToOnlineEights") {
+    eightsOnline = new heartsOnline(this);
+    pageSizer->Add(eightsOnline->getGui(), 1, wxGROW);
+  }
+}
+else {
+  if (heartsGame) {
+    heartsGame->hideGame();
+  }
+  if (eightsGame) {
+    eightsGame->hideGame();
   }
 
-  //  backgroundSizer->Layout();
-  pageSizer->Layout();
-  // backgroundSizer->Layout();
+  std::cout << "MainScreen" << std::endl;
+  pageSizer->Show(mainPane, true, true);
+}
+
+//  backgroundSizer->Layout();
+pageSizer->Layout();
+// backgroundSizer->Layout();
 }
 
 void Simple::sendServerMsg(std::string msg) { NI.send(msg); }
+
+void Simple::setGameDesired(std::string gameType) {
+  if (gameType == "HEARTSONLINE") {
+    switchPage("ConnectToOnlineHearts");
+  } else {
+    switchPage("ConnectToOnlineEights");
+  }
+}
 
 // void Simple::setServerReceivedMsgFunc(std::function<void(std::string)> func)
 // {

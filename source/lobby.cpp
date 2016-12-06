@@ -160,10 +160,11 @@ void lobby::makeGame(wxCommandEvent &event) {
   std::cout << sendMsg << std::endl;
   mainFrame->sendServerMsg(sendMsg);
   auto receivedMsg = mainFrame->getResponse();
-  receivedMakeGameResponse(receivedMsg);
+  receivedMakeGameResponse(receivedMsg, event);
 }
 
-void lobby::receivedMakeGameResponse(std::string receivedMsg) {
+void lobby::receivedMakeGameResponse(std::string receivedMsg,
+                                     wxCommandEvent &event) {
   showGeneralDialogBox(receivedMsg);
   if (receivedMsg == "FAILURE : UNKNOWN GAME TYPE") {
     std::cout << "Somethin done gone wrong" << std::endl;
@@ -172,6 +173,7 @@ void lobby::receivedMakeGameResponse(std::string receivedMsg) {
   } else if (receivedMsg == "SUCCESS") {
     std::cout << "Game created successfully" << std::endl;
     requestGames();
+    event.skip();
   }
 }
 
@@ -183,7 +185,7 @@ void lobby::joinGame(wxCommandEvent &event) {
   std::cout << sendMsg << std::endl;
   mainFrame->sendServerMsg(sendMsg);
   auto receivedMsg = mainFrame->getResponse();
-  receivedJoinGameResponse(receivedMsg);
+  receivedJoinGameResponse(receivedMsg, event);
 }
 
 void lobby::startGame(wxCommandEvent &event) {
@@ -198,10 +200,11 @@ void lobby::startGame(wxCommandEvent &event) {
   std::cout << sendMsg << std::endl;
   mainFrame->sendServerMsg(sendMsg);
   auto receivedMsg = mainFrame->getResponse();
-  receivedJoinGameResponse(receivedMsg);
+  receivedStartGameResponse(receivedMsg, event);
 }
 
-void lobby::receivedJoinGameResponse(std::string receivedMsg) {
+void lobby::receivedJoinGameResponse(std::string receivedMsg,
+                                     wxCommandEvent event) {
   showGeneralDialogBox(receivedMsg);
   if (receivedMsg == "FAILURE : GAME NOT FOUND") {
     std::cout << "Game could not be found" << std::endl;
@@ -209,7 +212,12 @@ void lobby::receivedJoinGameResponse(std::string receivedMsg) {
     std::cout << "This game is full" << std::endl;
   } else if (receivedMsg == "SUCCESS") {
     std::cout << "Game joined successfully" << std::endl;
-    requestGames();
+    Simple *mainFrame = (Simple *)GetParent();
+    if (typeOfGame == "HEARTS") {
+      mainFrame->setGameDesired("ConnectToOnlineHearts");
+    } else {
+      mainFrame->setGameDesired("ConnectToOnlineEights");
+    }
   }
 }
 

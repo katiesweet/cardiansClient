@@ -13,18 +13,18 @@
 class lobby : public wxPanel {
   clientInfo *screenInfo;
   availableGames *currentGames;
-  void receivedMakeGameResponse(std::string);
-  void receivedJoinGameResponse(std::string);
+  void receivedMakeGameResponse(std::string, wxCommandEvent &);
+  void receivedJoinGameResponse(std::string, wxCommandEvent &);
   void receivedStartGameResponse(std::string);
   void showGeneralDialogBox(std::string);
   wxButton *newGameBut;
   wxButton *joinGameBut;
   wxButton *startGameBut;
-  wxString typeOfGame;
 
 public:
   lobby(wxFrame *parent, wxString typeOfGame);
   ~lobby();
+  wxString typeOfGame;
   void startGame(wxCommandEvent &);
   void joinGame(wxCommandEvent &);
   void makeGame(wxCommandEvent &);

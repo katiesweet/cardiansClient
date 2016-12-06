@@ -4,6 +4,8 @@
 #include "GameLogic/CrazyEightsGame.hpp"
 #include "GameLogic/HeartsGame.hpp"
 #include "Networking/ClientNetworkInterface.hpp"
+#include "OnlineGameLogic/CrazyEightsOnline.hpp"
+#include "OnlineGameLogic/HeartsOnline.hpp"
 #include "baseBackground.h"
 #include "clientInfo.h"
 #include "imageInsert.h"
@@ -34,6 +36,8 @@ public:
   HeartsGame *heartsGame;
   lobby *heartsLobby;
   lobby *eightsLobby;
+  CrazyEightsOnline *eightsOnline;
+  HeartsOnline *heartsOnline;
   clientInfo *screenInfo;
   void sendServerMsg(std::string);
   // void setServerReceivedMsgFunc(std::function<void(std::string)>);
