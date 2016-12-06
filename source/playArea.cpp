@@ -276,7 +276,7 @@ void playArea::updatePlayerOne(int handSize) {
   for (int i = 0; i < maxHandSize; i++) {
     if (i >= handSize) {
       // std::cout << "Hiding card number " << i << std::endl;
-      playerOne->Hide(i);
+      playerOne->Hide(i + 1);
     }
   }
   playerOne->Layout();
@@ -287,7 +287,7 @@ void playArea::updatePlayerTwo(int handSize) {
   playerTwo->ShowItems(true);
   for (int i = 0; i < maxHandSize; i++) {
     if (i >= handSize) {
-      playerTwo->Hide(i);
+      playerTwo->Hide(i + 1);
     }
   }
   playerTwo->Layout();
@@ -297,7 +297,7 @@ void playArea::updatePlayerThree(int handSize) {
   playerThree->ShowItems(true);
   for (int i = 0; i < maxHandSize; i++) {
     if (i >= handSize) {
-      playerThree->Hide(i);
+      playerThree->Hide(i + 1);
     }
   }
   playerThree->Layout();
